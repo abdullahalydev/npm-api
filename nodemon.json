@@ -1,0 +1,4 @@
+{
+  "ignore": ["/node_modules", "*.test.ts", "*.test.js"],
+  "watch": ["*"]
+}
