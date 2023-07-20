@@ -41,9 +41,9 @@ export default class PackageController {
 		const name = request.params.package;
 
 		try {
-			const npmRequest = await axios.get(
-				`https://registry.npmjs.org/${name}`
-			);
+			const npmRequest = await axios.get(`https://registry.npmjs.org/${name}`, {
+				validateStatus: () => true,
+			});
 
 			if (npmRequest.status !== 200) {
 				response.status(404).json({
@@ -74,23 +74,22 @@ export default class PackageController {
 		const version = request.params.version;
 
 		try {
-			const packageRequest = await axios.get(
+			const npmRequest = await axios.get(
 				`https://registry.npmjs.org/${name}/${version}`,
 				{ validateStatus: () => true }
 			);
-			const packageResponse = packageRequest.data;
 
-			if (packageResponse.error) {
+			if (npmRequest.status !== 200) {
 				response.status(404).json({
 					success: false,
-					message: "package not found",
+					message: "package or version not found",
 				});
 				return;
 			}
 
 			response.status(200).json({
 				success: true,
-				data: packageResponse,
+				data: npmRequest.data,
 			});
 			return;
 		} catch {
