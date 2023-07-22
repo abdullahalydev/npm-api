@@ -29,6 +29,12 @@ export default class UserController {
 				data: npmRequest.data,
 			});
 			return;
-		} catch {}
+		} catch {
+			response.status(500).json({
+				success: false,
+				message: "internal server error"
+			})
+			return;
+		}
 	}
 }
